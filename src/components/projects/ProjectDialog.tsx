@@ -102,6 +102,31 @@ export function ProjectDialog({ project, locale, onClose }: Props) {
               ))}
             </dl>
 
+            {project.highlights && (
+              <div className="mt-10 border-t border-line pt-4">
+                <h3 className="mono text-xs tracking-[0.14em] text-fg-muted uppercase">{dict.projects.highlights}</h3>
+                <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {project.highlights[locale].map((item) => (
+                    <li key={item} className="flex items-start gap-3 leading-snug">
+                      <span
+                        aria-hidden="true"
+                        className="mt-1.5 size-2 shrink-0 rotate-45 rounded-[1px]"
+                        style={{ background: categoryColor[project.categories[0] ?? "web"] }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {project.metric && (
+              <div className="mt-10 border-t border-line pt-4">
+                <p className="text-4xl font-light tracking-tight">{project.metric.value}</p>
+                <p className="mono mt-2 text-xs tracking-[0.14em] text-fg-muted uppercase">{project.metric.label[locale]}</p>
+              </div>
+            )}
+
             {project.flow && (
               <div className="mt-10 border-t border-line pt-4">
                 <h3 className="mono text-xs tracking-[0.14em] text-fg-muted uppercase">{dict.projects.flow}</h3>

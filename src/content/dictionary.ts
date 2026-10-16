@@ -58,6 +58,7 @@ const pt = {
     github: "Ver mais no GitHub",
     confidential: "Detalhes internos omitidos por confidencialidade.",
     illustrative: "Ilustração conceitual",
+    highlights: "O que fiz",
     featured: "Destaque",
   },
   architecture: {
@@ -168,6 +169,7 @@ const en: Dictionary = {
     github: "More on GitHub",
     confidential: "Internal details omitted for confidentiality.",
     illustrative: "Conceptual illustration",
+    highlights: "What I did",
     featured: "Featured",
   },
   architecture: {

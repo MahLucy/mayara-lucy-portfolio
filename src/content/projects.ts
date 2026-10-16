@@ -23,6 +23,10 @@ export type Project = {
   solution: Localized;
   result: Localized;
   stack: string[];
+  /** What I did, as a short list (shown in the project dialog). */
+  highlights?: Localized<string[]>;
+  /** A confirmed, quantified outcome. Never invent one. */
+  metric?: { value: string; label: Localized };
   /** Conceptual flow, only when it can be shown publicly. */
   flow?: Localized<string[]>;
   url?: string;
@@ -95,32 +99,85 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "portal-seguranca-aws",
-    title: { pt: "Portal de Segurança: migração para AWS", en: "Security Portal: AWS migration" },
+    slug: "modernizacao-portais-aws",
+    title: {
+      pt: "Modernização e migração de portais internos para a AWS",
+      en: "Modernizing and migrating internal portals to AWS",
+    },
     org: "TecBan",
-    categories: ["cloud", "web"],
+    categories: ["cloud", "security", "web"],
     featured: true,
     summary: {
-      pt: "Manutenção, evolução e migração de uma aplicação Laravel interna para uma arquitetura em AWS Fargate.",
-      en: "Maintenance, evolution, and migration of an internal Laravel application to an AWS Fargate architecture.",
+      pt: "Correção de vulnerabilidades, upgrade e migração de dois portais Laravel legados para a AWS, com imagem Docker cerca de 80% menor.",
+      en: "Vulnerability remediation, upgrade, and migration of two legacy Laravel portals to AWS, with a Docker image about 80% smaller.",
     },
     problem: {
-      pt: "Modernizar a infraestrutura de uma aplicação interna de gestão de informações e processos da área de Segurança Física.",
-      en: "Modernize the infrastructure of an internal application that manages information and processes for the Physical Security area.",
+      pt: "Aplicações Laravel legadas, com vulnerabilidades críticas e infraestrutura on-premises.",
+      en: "Legacy Laravel applications with critical vulnerabilities, running on on-premises infrastructure.",
     },
     role: {
-      pt: "Atuo na manutenção e evolução da aplicação em Laravel/PHP e participei da migração para AWS Fargate.",
-      en: "I maintain and evolve the Laravel/PHP application and took part in its migration to AWS Fargate.",
+      pt: "Conduzi a remediação, o upgrade e a migração das duas aplicações para a AWS.",
+      en: "I led the remediation, the upgrade, and the migration of both applications to AWS.",
+    },
+    highlights: {
+      pt: [
+        "Correção de vulnerabilidades Critical/High",
+        "Upgrade estrutural do Laravel 9 para o 11/12",
+        "Containerização em RHEL 9 com otimização da imagem Docker",
+        "Migração de SQL Server para PostgreSQL no RDS",
+        "Deploy em ECS Fargate atrás de ALB, com build no GitLab CI",
+      ],
+      en: [
+        "Remediation of Critical/High vulnerabilities",
+        "Structural upgrade from Laravel 9 to 11/12",
+        "Containerization on RHEL 9 with Docker image optimization",
+        "Migration from SQL Server to PostgreSQL on RDS",
+        "Deployment on ECS Fargate behind an ALB, built in GitLab CI",
+      ],
     },
     solution: {
-      pt: "Aplicação Laravel containerizada e executada em contêineres gerenciados com AWS Fargate.",
-      en: "A containerized Laravel application running on managed containers with AWS Fargate.",
+      pt: "Aplicações containerizadas em RHEL 9 e executadas em ECS Fargate atrás de um ALB, com imagens construídas no GitLab CI e banco PostgreSQL no RDS.",
+      en: "Applications containerized on RHEL 9 and running on ECS Fargate behind an ALB, with images built in GitLab CI and a PostgreSQL database on RDS.",
     },
     result: {
-      pt: "Evolução da infraestrutura e execução da aplicação adequada ao ambiente de cloud.",
-      en: "Evolved infrastructure, with the application running in a cloud environment.",
+      pt: "Imagem Docker de 1,51 GB para cerca de 300 MB, vulnerabilidades Critical/High corrigidas e as duas aplicações rodando na AWS.",
+      en: "Docker image down from 1.51 GB to about 300 MB, Critical/High vulnerabilities fixed, and both applications running on AWS.",
     },
-    stack: ["Laravel", "PHP", "Docker", "AWS ECS/Fargate"],
+    metric: {
+      value: "1,51 GB → ~300 MB",
+      label: { pt: "imagem Docker, cerca de 80% menor", en: "Docker image, about 80% smaller" },
+    },
+    stack: ["Laravel", "PHP", "Docker", "RHEL 9", "AWS ECS/Fargate", "ALB", "RDS PostgreSQL", "GitLab CI"],
+  },
+  {
+    slug: "monitoramento-seguranca",
+    title: {
+      pt: "Plataforma de monitoramento e notificações de segurança",
+      en: "Security monitoring and notification platform",
+    },
+    org: "TecBan",
+    categories: ["web", "security"],
+    summary: {
+      pt: "Plataforma interna de monitoramento da área de segurança, com notificações automáticas e integração com chamados.",
+      en: "Internal monitoring platform for the security area, with automated notifications and ticketing integration.",
+    },
+    problem: {
+      pt: "Padronizar e agilizar a comunicação de ocorrências de segurança, reduzindo etapas manuais da equipe de monitoramento.",
+      en: "Standardize and speed up how security events are communicated, cutting manual steps for the monitoring team.",
+    },
+    role: {
+      pt: "Desenvolvo funcionalidades full stack da plataforma: templates de notificação, integrações e automações.",
+      en: "I build full stack features for the platform: notification templates, integrations, and automations.",
+    },
+    solution: {
+      pt: "Back-end em AdonisJS com Oracle e templates Edge, front-end em React e TypeScript, notificações automáticas por e-mail e WhatsApp a partir de templates, integração REST com o sistema de chamados e automação de alertas.",
+      en: "An AdonisJS back end with Oracle and Edge templates, a React and TypeScript front end, automated email and WhatsApp notifications from templates, REST integration with the ticketing system, and alert automation.",
+    },
+    result: {
+      pt: "Comunicação de ocorrências padronizada e automatizada, com abertura e fechamento de chamados integrados à plataforma.",
+      en: "Standardized, automated event communication, with ticket opening and closing integrated into the platform.",
+    },
+    stack: ["AdonisJS", "Oracle", "React", "TypeScript", "Edge", "REST APIs"],
   },
   {
     slug: "appsec-vulnerabilidades",
@@ -175,33 +232,6 @@ export const projects: Project[] = [
       en: "Improved integrations between systems and modernized application components.",
     },
     stack: ["Node.js", "NestJS", "PostgreSQL", "Oracle", "Microsoft Graph API"],
-  },
-  {
-    slug: "portal-indicadores-aws",
-    title: { pt: "Portal de Indicadores: migração para AWS", en: "Indicators Portal: AWS migration" },
-    org: "TecBan",
-    categories: ["cloud"],
-    summary: {
-      pt: "Migração de uma aplicação de indicadores para infraestrutura em nuvem.",
-      en: "Migration of an indicators application to cloud infrastructure.",
-    },
-    problem: {
-      pt: "Migrar uma aplicação de indicadores para uma infraestrutura em nuvem.",
-      en: "Migrate an indicators application to cloud infrastructure.",
-    },
-    role: {
-      pt: "Atuei nas atividades técnicas da migração, considerando os componentes de infraestrutura necessários para a execução.",
-      en: "I handled the technical migration work, covering the infrastructure components the application needs to run.",
-    },
-    solution: {
-      pt: "Planejamento e execução da mudança da aplicação para um ambiente baseado em AWS.",
-      en: "Planning and carrying out the application's move to an AWS-based environment.",
-    },
-    result: {
-      pt: "Aplicação migrada para um ambiente baseado em AWS.",
-      en: "Application migrated to an AWS-based environment.",
-    },
-    stack: ["AWS"],
   },
   {
     slug: "spotcases",

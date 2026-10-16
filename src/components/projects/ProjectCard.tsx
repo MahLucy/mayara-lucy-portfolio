@@ -89,6 +89,12 @@ export function ProjectCard({ project, locale, index, size, flip, onOpen }: Prop
               {project.role[locale]}
             </p>
           )}
+          {project.metric && (
+            <p data-card-line className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="text-2xl font-light tracking-tight">{project.metric.value}</span>
+              <span className="mono text-[0.7rem] tracking-[0.14em] text-fg-muted uppercase">{project.metric.label[locale]}</span>
+            </p>
+          )}
           <ul data-card-line className="flex flex-wrap gap-1.5 pt-1" aria-label={dict.projects.stack}>
             {project.stack.slice(0, feature ? 6 : 4).map((s) => (
               <li key={s} className="chip">
