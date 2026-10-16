@@ -22,12 +22,12 @@ export const profile = {
   bio: {
     pt: [
       "Sou desenvolvedora full stack em São Paulo. Comecei pela comunicação visual, no curso técnico do SENAI, e cheguei à engenharia de software pela Ciência da Computação. Essa combinação ainda orienta meu trabalho: entender o problema, desenhar a experiência e construir o sistema que a sustenta.",
-      "Na IBM Innovation Studio, criei protótipos e assets de IA com RAG, modelos de linguagem e busca vetorial, além de conduzir sessões de Design Thinking com clientes. Hoje, na TecBan, como Analista de Soluções de Segurança, desenvolvo aplicações full stack, conduzo a migração de sistemas para a AWS e trato vulnerabilidades ao longo do ciclo de desenvolvimento.",
+      "Na IBM Innovation Studio, criei protótipos e assets de IA com RAG, modelos de linguagem e busca vetorial, além de conduzir sessões de Design Thinking com clientes. Hoje, na TecBan, como Analista de Soluções de Segurança, desenvolvo sistemas internos full stack, automatizo processos, conduzo a migração de aplicações para a AWS e trato vulnerabilidades ao longo do ciclo de desenvolvimento.",
       "Como freelancer, desenvolvo sites e plataformas de ponta a ponta: do design no Figma ao front-end e ao back-end.",
     ],
     en: [
       "I'm a full stack developer based in São Paulo. I started in visual communication, through a technical course at SENAI, and moved into software engineering through a Computer Science degree. That mix still shapes how I work: understand the problem, design the experience, and build the system behind it.",
-      "At IBM Innovation Studio, I built AI prototypes and assets with RAG, language models, and vector search, and ran Design Thinking sessions with clients. Today, at TecBan, as a Security Solutions Analyst, I build full stack applications, lead the migration of systems to AWS, and handle vulnerabilities throughout the development lifecycle.",
+      "At IBM Innovation Studio, I built AI prototypes and assets with RAG, language models, and vector search, and ran Design Thinking sessions with clients. Today, at TecBan, as a Security Solutions Analyst, I build internal full stack systems, automate processes, lead the migration of applications to AWS, and handle vulnerabilities throughout the development lifecycle.",
       "As a freelancer, I build websites and platforms end to end: from the Figma design to the front end and back end.",
     ],
   } satisfies Localized<string[]>,

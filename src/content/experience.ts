@@ -42,11 +42,11 @@ export const timeline: TimelineEntry[] = [
     kind: "work",
     title: { pt: "Estagiária de TI", en: "IT Intern" },
     org: "Visual Software",
-    start: "2022",
-    end: "2023",
+    start: "2022-02",
+    end: "2023-08",
     description: {
-      pt: "Atendimento de chamados de clientes no Zendesk, controle de documentação de fornecedores e testes de sistema.",
-      en: "Customer ticket support in Zendesk, vendor documentation control, and system testing.",
+      pt: "Suporte a clientes no Zendesk, gestão de documentação de fornecedores, testes de sistema e apoio no desenvolvimento.",
+      en: "Customer support in Zendesk, vendor documentation management, system testing, and development support.",
     },
   },
   {
@@ -57,8 +57,8 @@ export const timeline: TimelineEntry[] = [
     start: "2023-09",
     end: "2025-03",
     description: {
-      pt: "Protótipos e assets de IA com RAG, LLMs e busca vetorial, integrando serviços Watson a front-ends em React e APIs em Node.js. Sessões de Design Thinking com clientes.",
-      en: "AI prototypes and assets with RAG, LLMs, and vector search, connecting Watson services to React front ends and Node.js APIs. Design Thinking sessions with clients.",
+      pt: "Protótipos de IA para clientes com Watson e watsonx (RAG, LLMs e busca vetorial) em aplicações MERN, APIs REST integradas à IBM Cloud e dashboards interativos. Sessões de Design Thinking com clientes.",
+      en: "AI prototypes for clients with Watson and watsonx (RAG, LLMs, and vector search) in MERN applications, REST APIs integrated with IBM Cloud, and interactive dashboards. Design Thinking sessions with clients.",
     },
   },
   {
@@ -69,8 +69,8 @@ export const timeline: TimelineEntry[] = [
     start: "2025-03",
     end: null,
     description: {
-      pt: "Desenvolvimento full stack, migração de sistemas para a AWS e análise e correção de vulnerabilidades em aplicações do setor financeiro.",
-      en: "Full stack development, migration of systems to AWS, and vulnerability analysis and remediation for financial sector applications.",
+      pt: "Desenvolvimento full stack (React, Node.js, PHP/Laravel e AdonisJS) de sistemas internos de segurança, migração de aplicações para a AWS, automações de processos e correção de vulnerabilidades.",
+      en: "Full stack development (React, Node.js, PHP/Laravel, and AdonisJS) of internal security systems, migration of applications to AWS, process automation, and vulnerability remediation.",
     },
   },
 ];
