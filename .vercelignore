@@ -6,3 +6,4 @@ test-results
 playwright-report
 *.tsbuildinfo
 .env*
+*.mp4
