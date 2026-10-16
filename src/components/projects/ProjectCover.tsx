@@ -42,19 +42,21 @@ export function ProjectCover({ project, locale, index, sizes, illustrativeLabel,
               gap={large ? 34 : 28}
               className="absolute top-1/2 right-[6%] h-[86%] w-auto -translate-y-1/2"
             />
-            {project.flow && (
-              <ol aria-hidden="true" className="absolute bottom-5 left-5 flex max-w-[55%] flex-col gap-1.5">
-                {project.flow[locale].map((step, i) => (
-                  <li key={step} className="mono flex items-center gap-2 text-[0.68rem] tracking-wide text-[#c9d2e8] uppercase">
-                    <span className="size-1.5 rounded-full" style={{ background: i === project.flow![locale].length - 1 ? "#d8ff68" : color }} />
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            )}
           </div>
         )}
       </div>
+
+      {/* Text sits outside the zooming media layer, so it is never cropped by the scroll zoom. */}
+      {!project.preview && project.flow && (
+        <ol aria-hidden="true" className="absolute bottom-5 left-5 flex max-w-[55%] flex-col gap-1.5">
+          {project.flow[locale].map((step, i) => (
+            <li key={step} className="mono flex items-center gap-2 text-[0.68rem] tracking-wide text-[#c9d2e8] uppercase">
+              <span className="size-1.5 shrink-0 rounded-full" style={{ background: i === project.flow![locale].length - 1 ? "#d8ff68" : color }} />
+              {step}
+            </li>
+          ))}
+        </ol>
+      )}
 
       <span
         aria-hidden="true"

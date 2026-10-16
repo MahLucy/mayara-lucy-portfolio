@@ -150,12 +150,14 @@ export function ProjectsGallery({ locale }: { locale: Locale }) {
           gsap.fromTo(
             frame,
             { clipPath: big ? "inset(14% 22% 14% 22% round 1.4rem)" : "inset(22% 10% 22% 10% round 1.4rem)" },
-            { clipPath: "inset(0% 0% 0% 0% round 1.4rem)", ease: "none", scrollTrigger: { trigger: card, start: "top 95%", end: "top 40%", scrub: 0.6 } },
+            { clipPath: "inset(0% 0% 0% 0% round 1.4rem)", ease: "none", scrollTrigger: { trigger: card, start: "top 95%", end: "top 55%", scrub: 0.6 } },
           );
+          // The cover settles to its real size by the time the card reaches the middle of the
+          // screen, and stays there — what you see in focus is the whole illustration.
           gsap.fromTo(
             media,
-            { scale: 1.3, yPercent: -5 },
-            { scale: 1.02, yPercent: 5, ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true } },
+            { scale: 1.18 },
+            { scale: 1, ease: "power2.out", scrollTrigger: { trigger: card, start: "top 95%", end: "center 55%", scrub: 0.6 } },
           );
           gsap.fromTo(
             lines,
