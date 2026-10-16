@@ -2,7 +2,7 @@
 
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { useCallback, useRef, useState, type CSSProperties } from "react";
-import { HeroScene } from "@/components/3d/HeroVisual";
+import { HeroScene, type SceneStatus } from "@/components/3d/HeroVisual";
 import { StackGlyph } from "@/components/3d/StackGlyph";
 import { getDictionary } from "@/content/dictionary";
 import { profile } from "@/content/profile";
@@ -30,8 +30,8 @@ export function Hero({ locale }: { locale: Locale }) {
   const stage = useRef<HTMLDivElement>(null);
   const anchor = useRef<HTMLDivElement>(null);
   const spacer = useRef<HTMLDivElement>(null);
-  const [sceneReady, setSceneReady] = useState(false);
-  const onReadyChange = useCallback((ready: boolean) => setSceneReady(ready), []);
+  const [sceneStatus, setSceneStatus] = useState<SceneStatus>("pending");
+  const onStatusChange = useCallback((status: SceneStatus) => setSceneStatus(status), []);
 
   useGSAP(
     () => {
@@ -148,7 +148,7 @@ export function Hero({ locale }: { locale: Locale }) {
   return (
     <section ref={root} id={sectionIds.top} data-theme="dark" aria-labelledby="hero-title" className="relative isolate">
       <div ref={stage} data-hero-stage className="grain relative flex h-svh min-h-[560px] flex-col overflow-hidden">
-        <HeroScene onReadyChange={onReadyChange} />
+        <HeroScene onStatusChange={onStatusChange} />
         <div
           data-hero-scrim
           aria-hidden="true"
@@ -166,14 +166,7 @@ export function Hero({ locale }: { locale: Locale }) {
               data-hero-title
               className="mt-6 text-[clamp(3rem,1.6rem+6.4vw,7rem)] leading-[0.92] font-light tracking-[-0.045em]"
             >
-              <span className="hero-word">
-                <span style={delay(0)}>Mayara</span>
-              </span>{" "}
-              <span className="hero-word">
-                <strong className="font-medium" style={delay(1)}>
-                  Lucy
-                </strong>
-              </span>
+              Mayara <strong className="font-medium">Lucy</strong>
             </h1>
 
             <p data-hero-intro style={delay(1)} className="mono mt-6 text-sm tracking-wide text-cyan sm:text-base">
@@ -207,11 +200,15 @@ export function Hero({ locale }: { locale: Locale }) {
               aria-label={dict.hero.sceneLabel}
               className="absolute inset-0 will-change-transform"
             >
-              <StackGlyph
-                className={`absolute inset-0 m-auto h-[82%] w-auto max-w-full transition-opacity duration-700 ${
-                  sceneReady ? "opacity-0" : "opacity-100"
-                }`}
-              />
+              {/* Before hydration CSS decides (hidden when the 3D opening will play); afterwards the
+                  illustration shows only when it is the fallback. */}
+              <div
+                data-hero-glyph
+                className="absolute inset-0 transition-opacity duration-700"
+                style={sceneStatus === "pending" ? undefined : { opacity: sceneStatus === "static" ? 1 : 0 }}
+              >
+                <StackGlyph className="absolute inset-0 m-auto h-[82%] w-auto max-w-full" />
+              </div>
             </div>
           </div>
         </div>

@@ -279,6 +279,14 @@
     transform: scaleX(0);
   }
 
+  /* Desktop: the static illustration is a fallback, hidden while the 3D opening is expected
+     (matches scene3dQuery in HeroVisual.tsx). Smaller screens use it as the opening itself. */
+  @media (min-width: 1024px) {
+    .can-motion [data-hero-glyph] {
+      opacity: 0;
+    }
+  }
+
   /* Safety net: if scripts never run, reveal the copy anyway. */
   .can-motion:not(.motion-live) [data-hero-reveal] {
     animation: reveal-fallback 0.8s var(--ease-out) 3.5s forwards;
@@ -394,35 +402,14 @@
 }
 
 /*
- * Hero intro runs in CSS so it starts at first paint, without waiting for
- * hydration (keeps LCP fast). Words rise through a mask; the rest fades up.
+ * Hero intro: the kicker and role fade up on first paint (CSS, no hydration
+ * needed). The name has no entrance motion — it is in place from the first
+ * frame; the opening drama is the 3D scene and the scroll.
  */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-word {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: top;
-    padding-bottom: 0.08em;
-    margin-bottom: -0.08em;
-  }
-
-  .hero-word > * {
-    display: inline-block;
-    animation: hero-word 1.1s var(--ease-out) both;
-    animation-delay: calc(var(--i, 0) * 0.1s);
-  }
-
   [data-hero-intro] {
     animation: hero-fade 0.9s var(--ease-out) both;
-    animation-delay: calc(0.55s + var(--i, 0) * 0.08s);
-  }
-}
-
-/* Starts partly inside the mask so the name is painted (and counted for LCP) on the first frame. */
-@keyframes hero-word {
-  from {
-    transform: translateY(58%);
-    opacity: 0.35;
+    animation-delay: calc(0.35s + var(--i, 0) * 0.08s);
   }
 }
 

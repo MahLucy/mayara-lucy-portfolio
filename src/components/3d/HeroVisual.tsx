@@ -23,11 +23,15 @@ class SceneBoundary extends Component<{ children: ReactNode; onError: () => void
 
 let webgl: boolean | null = null;
 
+/** Media query where the WebGL opening runs; smaller screens use the SVG illustration. */
+export const scene3dQuery = "(min-width: 1024px)";
+
 function can3d(): boolean {
   webgl ??= canUseWebGL();
   const saveData =
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
-  return webgl && !prefersReducedMotion() && !saveData;
+  // Phones and tablets get the SVG version of the opening: same choreography, no Three.js cost.
+  return webgl && !prefersReducedMotion() && !saveData && window.matchMedia(scene3dQuery).matches;
 }
 
 function subscribeMotion(onChange: () => void) {
@@ -55,38 +59,59 @@ function scheduleStart() {
   const idle = (cb: () => void) =>
     "requestIdleCallback" in window ? window.requestIdleCallback(cb, { timeout: 2500 }) : globalThis.setTimeout(cb, 1200);
 
-  // The static illustration covers the first paint; the scene loads on the first sign of a person
-  // (mouse move, touch, scroll, or key), so it never competes with the initial page load.
+  // The scene is the hero's opening, so it starts on its own as soon as the page has
+  // loaded (in an idle moment). Any interaction before that starts it right away.
   const events = ["pointermove", "pointerdown", "touchstart", "scroll", "keydown"] as const;
-  const onFirst = () => {
-    events.forEach((e) => window.removeEventListener(e, onFirst));
-    idle(requestStart);
+  const go = () => {
+    events.forEach((e) => window.removeEventListener(e, go));
+    window.removeEventListener("load", onLoad);
+    requestStart();
   };
-  events.forEach((e) => window.addEventListener(e, onFirst, { passive: true, once: true }));
+  const onLoad = () => idle(go);
+  events.forEach((e) => window.addEventListener(e, go, { passive: true, once: true }));
+  if (document.readyState === "complete") onLoad();
+  else window.addEventListener("load", onLoad, { once: true });
 }
 
 /**
- * Full-stage WebGL layer for the hero. It renders nothing until the first
- * interaction; the static SVG inside the hero anchor covers that time and is
- * also the permanent fallback (no WebGL, reduced motion, Save-Data, errors).
+ * - pending: not known yet (server render / before hydration) — CSS decides.
+ * - loading: WebGL will be used; nothing is shown until the scene fades in.
+ * - ready:   the WebGL scene is on screen.
+ * - static:  no WebGL scene (unsupported, reduced motion, Save-Data, error or too slow):
+ *            the SVG illustration is the visual.
  */
-export function HeroScene({ onReadyChange }: { onReadyChange: (ready: boolean) => void }) {
+export type SceneStatus = "pending" | "loading" | "ready" | "static";
+
+/** If the scene isn't up after this long, show the static illustration instead of nothing. */
+const SLOW_SCENE_MS = 6000;
+
+/**
+ * Full-stage WebGL layer for the hero. It starts right after the page loads and
+ * fades in; the static SVG inside the hero anchor is only the fallback (no
+ * WebGL, reduced motion, Save-Data, errors), never a placeholder that gets swapped.
+ */
+export function HeroScene({ onStatusChange }: { onStatusChange: (status: SceneStatus) => void }) {
   const root = useRef<HTMLDivElement>(null);
-  const supports3d = useSyncExternalStore(subscribeMotion, can3d, () => false);
+  const supports3d = useSyncExternalStore<boolean | null>(subscribeMotion, can3d, () => null);
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
+  const [slow, setSlow] = useState(false);
   const [visible, setVisible] = useState(true);
   const started = useSyncExternalStore(subscribeStart, () => startRequested, () => false);
   const mode = supports3d && !failed && started ? "3d" : "static";
+  const status: SceneStatus =
+    supports3d === null ? "pending" : !supports3d || failed ? "static" : ready ? "ready" : slow ? "static" : "loading";
 
-  // Three.js is heavy: wait for the first interaction, then for an idle moment.
   useEffect(() => {
-    if (supports3d) scheduleStart();
+    if (!supports3d) return;
+    scheduleStart();
+    const id = window.setTimeout(() => setSlow(true), SLOW_SCENE_MS);
+    return () => window.clearTimeout(id);
   }, [supports3d]);
 
   useEffect(() => {
-    onReadyChange(ready && mode === "3d");
-  }, [ready, mode, onReadyChange]);
+    onStatusChange(status);
+  }, [status, onStatusChange]);
 
   useEffect(() => {
     const el = root.current;
