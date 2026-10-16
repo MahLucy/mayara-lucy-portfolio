@@ -1,0 +1,91 @@
+/*
+ * Design tokens — "Camadas" direction.
+ * Each accent maps to one layer of the stack:
+ *   ice = interface · blue = APIs · data = data · cyan = AI · lime = cloud · coral = security
+ */
+:root {
+  --ink: #0b1020;
+  --ink-2: #131a30;
+  --ink-3: #1c2440;
+  --ice: #f1f5fa;
+  --paper: #f8fafc;
+
+  --blue: #486bff;
+  --blue-ink: #2c4bdb;
+  --data: #8fa6ff;
+  --cyan: #52e6d0;
+  --cyan-ink: #0b6e62;
+  --lime: #d8ff68;
+  --coral: #ff755e;
+  --coral-ink: #b93a24;
+
+  --gutter: clamp(1rem, 0.5rem + 3vw, 3rem);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+}
+
+/* Light theme is the default reading surface; repeated on [data-theme="light"] so it can nest. */
+:root,
+[data-theme="light"] {
+  --bg: var(--ice);
+  --surface: #ffffff;
+  --fg: var(--ink);
+  --fg-muted: #4a5470;
+  --line: rgba(11, 16, 32, 0.12);
+  --line-strong: rgba(11, 16, 32, 0.28);
+  --accent: var(--blue-ink);
+  --focus: var(--blue-ink);
+  --btn-bg: var(--ink);
+  --btn-fg: var(--ice);
+  --btn-bg-hover: var(--blue-ink);
+}
+
+[data-theme="dark"] {
+  --bg: var(--ink);
+  --surface: var(--ink-2);
+  --fg: var(--ice);
+  --fg-muted: #a9b3cc;
+  --line: rgba(241, 245, 250, 0.14);
+  --line-strong: rgba(241, 245, 250, 0.32);
+  --accent: var(--cyan);
+  --focus: var(--lime);
+  --btn-bg: var(--lime);
+  --btn-fg: var(--ink);
+  --btn-bg-hover: #e6ff9e;
+}
+
+/* Stack chapter: the API layer's blue, deepened for text contrast (ice on it ≈ 6:1). */
+[data-theme="blue"] {
+  --bg: #2c4bdb;
+  --surface: #2541c9;
+  --fg: var(--ice);
+  --fg-muted: #dbe2fb;
+  --line: rgba(241, 245, 250, 0.26);
+  --line-strong: rgba(241, 245, 250, 0.5);
+  --accent: var(--lime);
+  --focus: var(--lime);
+  --btn-bg: var(--lime);
+  --btn-fg: var(--ink);
+  --btn-bg-hover: #e6ff9e;
+}
+
+/* About chapter: the cloud layer's lime, with ink text (≈ 16:1). */
+[data-theme="lime"] {
+  --bg: var(--lime);
+  --surface: #e6ff9a;
+  --fg: var(--ink);
+  --fg-muted: #3f4824;
+  --line: rgba(11, 16, 32, 0.18);
+  --line-strong: rgba(11, 16, 32, 0.4);
+  --accent: #23379f;
+  --focus: var(--ink);
+  --btn-bg: var(--ink);
+  --btn-fg: var(--lime);
+  --btn-bg-hover: #23379f;
+}
+
+[data-theme] {
+  background-color: var(--bg);
+  color: var(--fg);
+}

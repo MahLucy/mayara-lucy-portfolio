@@ -1,0 +1,552 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme inline {
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ice: var(--ice);
+  --color-paper: var(--paper);
+  --color-blue: var(--blue);
+  --color-blue-ink: var(--blue-ink);
+  --color-cyan: var(--cyan);
+  --color-cyan-ink: var(--cyan-ink);
+  --color-lime: var(--lime);
+  --color-coral: var(--coral);
+  --color-coral-ink: var(--coral-ink);
+  --color-data: var(--data);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-surface: var(--surface);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+    background: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 1rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .kicker::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+    line-height: 1.05;
+    font-weight: 300;
+  }
+
+  .section-title strong {
+    font-weight: 500;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.75rem 1.4rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1;
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+  }
+
+  .btn-primary:hover {
+    background: var(--btn-bg-hover);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--fg);
+  }
+
+  .btn .btn-icon {
+    transition: transform 250ms var(--ease-out);
+  }
+
+  .btn:hover .btn-icon {
+    transform: translateX(3px);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+  }
+
+  .sr-only-focusable:not(:focus) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Scroll-driven CSS (progressive enhancement) ---------- */
+
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 60;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--lime), var(--coral));
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      animation: progress-grow linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    .reveal-view {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+@keyframes progress-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Scroll room for pinned scenes, reserved in CSS so the layout is identical
+ * before and after hydration (deep links never jump). Each value matches the
+ * media query its scene uses in lib/gsap.ts.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .can-motion [data-hero-spacer] {
+    height: 70svh;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .can-motion [data-hero-spacer] {
+    height: 110svh;
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
+  .can-motion [data-arch-spacer] {
+    height: 220svh;
+  }
+}
+
+/*
+ * Hero opening state before hydration — mirrors heroOpening in Hero.tsx so the
+ * first paint is already the large composition GSAP will start from.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .can-motion [data-hero-anchor] {
+    transform: translate(0, 4vh) scale(1.45);
+  }
+
+  .can-motion [data-hero-reveal] {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .can-motion [data-hero-meter] {
+    transform: scaleX(0);
+  }
+
+  /* Safety net: if scripts never run, reveal the copy anyway. */
+  .can-motion:not(.motion-live) [data-hero-reveal] {
+    animation: reveal-fallback 0.8s var(--ease-out) 3.5s forwards;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .can-motion [data-hero-anchor] {
+    transform: translate(-6vw, 2vh) scale(1.75);
+  }
+
+  .can-motion [data-hero-title] {
+    transform: scale(1.12);
+    transform-origin: 0% 100%;
+  }
+}
+
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Horizontal stack: card width is shared by the layout and the reserved scroll distance. */
+:root {
+  --stack-card: min(34rem, 40vw);
+  --stack-intro: min(30rem, 34vw);
+  --stack-gap: 2rem;
+}
+
+/*
+ * Stack track. Default (no JS, reduced motion, short screens): cards wrap into
+ * a grid. Only the pinned horizontal scene lays them out as a single row.
+ */
+@media (min-width: 1024px) {
+  .stack-intro {
+    width: 100%;
+  }
+
+  .stack-card {
+    width: var(--stack-card);
+  }
+
+  .stack-track {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  .can-motion .stack-track {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+  }
+
+  .can-motion .stack-intro {
+    width: var(--stack-intro);
+  }
+
+  .can-motion .stack-stage {
+    height: 100svh;
+    padding-block: 0;
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  .can-motion [data-stack-spacer] {
+    height: max(0px, calc(var(--stack-intro) + 5 * var(--stack-card) + 6 * var(--stack-gap) + 2 * var(--gutter) - 100vw + 30svh));
+  }
+}
+
+/* ---------- Marquee ---------- */
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee-track.is-gsap {
+  animation: none;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+  }
+
+  .marquee-track > [aria-hidden="true"] {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Hero intro runs in CSS so it starts at first paint, without waiting for
+ * hydration (keeps LCP fast). Words rise through a mask; the rest fades up.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .hero-word > * {
+    display: inline-block;
+    animation: hero-word 1.1s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+  }
+
+  [data-hero-intro] {
+    animation: hero-fade 0.9s var(--ease-out) both;
+    animation-delay: calc(0.55s + var(--i, 0) * 0.08s);
+  }
+}
+
+/* Starts partly inside the mask so the name is painted (and counted for LCP) on the first frame. */
+@keyframes hero-word {
+  from {
+    transform: translateY(58%);
+    opacity: 0.35;
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+/* ---------- Project cards ---------- */
+
+.project-card [data-cover-bar] {
+  transition: transform 600ms var(--ease-out);
+}
+
+.project-card [data-cover-frame] {
+  transition: box-shadow 600ms var(--ease-out);
+}
+
+/* The card at the center of the screen takes focus: its accent extends and the index lights up. */
+[data-project-card].is-focus [data-cover-bar] {
+  transform: scaleX(2.4);
+}
+
+[data-project-card].is-focus [data-cover-frame] {
+  box-shadow: 0 40px 90px -40px rgba(11, 16, 32, 0.55);
+}
+
+[data-project-card].is-focus [data-card-index] {
+  color: var(--fg);
+}
+
+/* Project dialog: the cover opens through a mask, then the content follows in sequence. */
+@media (prefers-reduced-motion: no-preference) {
+  dialog[open] [data-dialog-cover] {
+    animation: cover-open 900ms var(--ease-out) both;
+  }
+
+  dialog[open] [data-dialog-cover] [data-cover-media] {
+    animation: cover-settle 1200ms var(--ease-out) both;
+  }
+
+  dialog[open] [data-dialog-body] > * {
+    animation: hero-fade 700ms var(--ease-out) both;
+  }
+
+  dialog[open] [data-dialog-body] > :nth-child(2) { animation-delay: 150ms; }
+  dialog[open] [data-dialog-body] > :nth-child(3) { animation-delay: 220ms; }
+  dialog[open] [data-dialog-body] > :nth-child(4) { animation-delay: 300ms; }
+  dialog[open] [data-dialog-body] > :nth-child(n + 5) { animation-delay: 380ms; }
+
+  dialog::backdrop {
+    animation: backdrop-in 400ms ease both;
+  }
+}
+
+@keyframes cover-open {
+  from {
+    clip-path: inset(30% 25% 30% 25% round 1rem);
+  }
+  to {
+    clip-path: inset(0 round 1rem);
+  }
+}
+
+@keyframes cover-settle {
+  from {
+    transform: scale(1.25);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Architecture: once security closes the loop, its envelope starts to circulate. */
+@media (prefers-reduced-motion: no-preference) {
+  .arch-envelope-on {
+    animation: envelope-flow 1.6s linear infinite;
+  }
+}
+
+@keyframes envelope-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* Journey: milestones light up once scrolled past. */
+[data-journey-item].is-past [data-journey-dot] {
+  background: var(--ink);
+  color: var(--lime);
+  border-color: var(--ink);
+}
+
+/* Header links: an underline that grows from the left. */
+header > div nav a {
+  position: relative;
+}
+
+header > div nav a::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.35rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms var(--ease-out);
+}
+
+header > div nav a:hover::after,
+header > div nav a:focus-visible::after {
+  transform: scaleX(1);
+}
