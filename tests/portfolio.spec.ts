@@ -58,8 +58,8 @@ test.describe("projects", () => {
     await appsec.scrollIntoViewIfNeeded();
     await appsec.click();
     await expect(appsec).toHaveAttribute("aria-pressed", "true");
-    await expect(cards).toHaveCount(1);
-    await expect(page.getByText("1 projeto", { exact: true })).toBeVisible();
+    await expect(cards).toHaveCount(3);
+    await expect(page.getByText("3 projetos", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Todos" }).click();
     await expect(cards).toHaveCount(14);
   });
@@ -80,8 +80,11 @@ test.describe("projects", () => {
   });
 
   test("deep link opens the project dialog", async ({ page }) => {
-    await page.goto("/?p=portal-seguranca-aws");
-    await expect(page.getByRole("dialog", { name: /Portal de Segurança/ })).toBeVisible();
+    await page.goto("/?p=modernizacao-portais-aws");
+    const dialog = page.getByRole("dialog", { name: /Modernização e migração de portais/ });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText("Laravel 9 para o 11/12");
+    await expect(dialog).toContainText("1,51 GB → ~300 MB");
   });
 
   test("freelance project links to the live site", async ({ page }) => {
