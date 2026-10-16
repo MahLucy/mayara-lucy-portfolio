@@ -1,0 +1,8 @@
+# Local tooling and build output: never upload these to Vercel.
+.claude
+node_modules
+.next
+test-results
+playwright-report
+*.tsbuildinfo
+.env*
