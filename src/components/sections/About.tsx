@@ -58,6 +58,7 @@ export function About({ locale }: { locale: Locale }) {
                     {c.issuer}
                     {c.year ? ` · ${c.year}` : ""}
                   </p>
+                  {c.note && <p className="mono mt-1 text-[0.7rem] tracking-wide text-fg-muted uppercase">{c.note[locale]}</p>}
                 </div>
                 {c.url && (
                   <a

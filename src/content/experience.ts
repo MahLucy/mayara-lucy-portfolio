@@ -80,6 +80,14 @@ export type Credential = {
   issuer: string;
   year?: string;
   url?: string;
+  /** Clarifies what kind of credential it is (e.g. a prep course, not the vendor certification). */
+  note?: Localized;
+};
+
+/** Prep courses taught by SENAI that share a name with official vendor certifications. */
+const senaiCourse: Localized = {
+  pt: "Curso do SENAI · não é a certificação oficial",
+  en: "SENAI course · not the official certification",
 };
 
 export const credentials: Credential[] = [
@@ -91,6 +99,7 @@ export const credentials: Credential[] = [
   {
     name: "Enterprise Design Thinking Practitioner",
     issuer: "IBM · Credly",
+    year: "2024",
     url: "https://www.credly.com/badges/60d0480f-9073-4bc3-96b4-b4f008a8b0a9",
   },
   {
@@ -98,6 +107,39 @@ export const credentials: Credential[] = [
     issuer: "Cognitive Class · IBM",
     year: "2024",
     url: "https://courses.cognitiveclass.ai/certificates/dc303230593b4f978a67eb1d230d28a8",
+  },
+  {
+    name: "AWS Cloud Foundations",
+    issuer: "SENAI Frederico Jacob · 80h",
+    year: "2026",
+    note: senaiCourse,
+  },
+  {
+    name: "AWS & IA Immersion (Henrylle Maia)",
+    issuer: "Oregon EAD",
+    year: "2026",
+  },
+  {
+    name: "AZ-900: Microsoft Azure Fundamentals",
+    issuer: "SENAI Theobaldo de Nigris · 80h",
+    year: "2023",
+    note: senaiCourse,
+  },
+  {
+    name: "AI-900: Microsoft Azure Inteligência Artificial",
+    issuer: "SENAI Frederico Jacob · 80h",
+    year: "2023",
+    note: senaiCourse,
+  },
+  {
+    name: "IBM Quantum Conversations",
+    issuer: "IBM",
+    year: "2023",
+  },
+  {
+    name: "Power BI",
+    issuer: "SENAI Frederico Jacob · 60h",
+    year: "2023",
   },
   {
     name: "Introdução à IA moderna",
