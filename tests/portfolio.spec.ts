@@ -144,6 +144,15 @@ test.describe("layout", () => {
 });
 
 test.describe("motion and 3D fallbacks", () => {
+  test("phones use the SVG opening without loading Three.js", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "mobile only");
+    await page.goto("/");
+    await page.evaluate(() => window.dispatchEvent(new Event("scroll")));
+    await page.waitForTimeout(2000);
+    await expect(page.locator("canvas")).toHaveCount(0);
+    await expect(page.locator("[data-hero-glyph]")).toHaveCSS("opacity", "1");
+  });
+
   test("reduced motion: content visible, static illustration, no canvas", async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();
@@ -152,6 +161,7 @@ test.describe("motion and 3D fallbacks", () => {
     await expect(page.locator("html")).not.toHaveClass(/can-motion/);
     await expect(page.locator("canvas")).toHaveCount(0);
     await expect(page.getByRole("img", { name: /cinco camadas/ })).toBeVisible();
+    await expect(page.locator("[data-hero-glyph]")).toHaveCSS("opacity", "1");
     // Architecture stays fully lit and unpinned.
     await expect(page.locator("#architecture li[aria-current]")).toHaveCount(0);
     await context.close();
@@ -171,17 +181,16 @@ test.describe("motion and 3D fallbacks", () => {
     await page.waitForTimeout(1500);
     await expect(page.locator("canvas")).toHaveCount(0);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator("[data-hero-glyph]")).toHaveCSS("opacity", "1");
   });
 
-  test("WebGL scene loads lazily when supported", async ({ page, isMobile }) => {
+  test("WebGL scene starts on its own and the fallback illustration stays hidden", async ({ page, isMobile }) => {
+    test.skip(isMobile, "phones use the SVG opening");
     await page.goto("/");
-    // Static illustration first; the scene waits for the first interaction.
-    await expect(page.getByRole("img", { name: /cinco camadas|five stacked/ })).toBeVisible();
-    await page.waitForTimeout(1500);
-    await expect(page.locator("#top canvas")).toHaveCount(0);
-    if (isMobile) await page.evaluate(() => window.dispatchEvent(new Event("scroll")));
-    else await page.mouse.move(400, 300);
+    // No interaction: the opening scene must start by itself after load.
     await expect(page.locator("#top canvas")).toHaveCount(1, { timeout: 15_000 });
+    // The static illustration is only a fallback; it never flashes before the 3D scene.
+    await expect(page.locator("[data-hero-glyph]")).toHaveCSS("opacity", "0");
   });
 
   test("no runtime errors on load and scroll", async ({ page }) => {
